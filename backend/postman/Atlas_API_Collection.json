@@ -1,0 +1,830 @@
+{
+  "info": {
+    "_postman_id": "atlas-api-collection-2026",
+    "name": "ATLAS Interview Management System API",
+    "description": "Complete API collection for the ATLAS Interview Management System.\n\nThis collection covers:\n- Authentication (Login, Current User)\n- Protected Endpoints\n- Role-Based Dashboard Access (Admin, HR, Tech, Reception)\n\n## Authentication\nAll protected endpoints require a JWT Bearer token. Use the Login endpoint to obtain a token, then set it as the `token` collection variable.\n\n## Roles\n- SYSTEM_ADMIN: Full access\n- HR_ADMIN: HR dashboard access\n- TECH_HEAD: Tech dashboard access\n- RECEPTIONIST: Reception dashboard access",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "{{base_url}}",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "{{token}}",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for user login and profile retrieval",
+      "item": [
+        {
+          "name": "Login - System Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "    pm.environment.set('token', jsonData.token);",
+                  "    pm.test('Login successful', function() {",
+                  "        pm.expect(jsonData.success).to.be.true;",
+                  "        pm.expect(jsonData.token).to.be.a('string');",
+                  "        pm.expect(jsonData.role).to.equal('SYSTEM_ADMIN');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate as System Admin and obtain a JWT token.\n\nThe token is automatically saved to the `token` environment/collection variable for use in subsequent requests.\n\n**Roles:** Public\n**Auth:** None required"
+          },
+          "response": [
+            {
+              "name": "200 - Successful Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@atlas.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTQ3N2Y5ZTctMzZkYy00OGY1LTk0YWQtZjEyNmQ0ODFjOTI2IiwiZW1haWwiOiJhZG1pbkBhdGxhcy5jb20iLCJyb2xlIjoiU1lTVEVNX0FETUlOIiwiZXhwIjoxNzgyMDU1MTY3fQ.example\",\n  \"role\": \"SYSTEM_ADMIN\",\n  \"message\": \"Welcome System Admin\"\n}"
+            },
+            {
+              "name": "401 - Invalid Credentials",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Invalid email or password\"\n}"
+            },
+            {
+              "name": "422 - Validation Error",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"missing\",\n      \"loc\": [\"body\", \"email\"],\n      \"msg\": \"Field required\",\n      \"input\": {}\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login - HR Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.token);",
+                  "    pm.test('HR Admin login successful', function() {",
+                  "        pm.expect(jsonData.role).to.equal('HR_ADMIN');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{hr_email}}\",\n  \"password\": \"{{hr_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate as HR Admin.\n\n**Note:** Ensure the HR_ADMIN test user has a valid password hash in the database."
+          },
+          "response": [
+            {
+              "name": "200 - Successful Login",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"token\": \"<jwt_token>\",\n  \"role\": \"HR_ADMIN\",\n  \"message\": \"Welcome HR Admin\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login - Tech Head",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.token);",
+                  "    pm.test('Tech Head login successful', function() {",
+                  "        pm.expect(jsonData.role).to.equal('TECH_HEAD');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tech_email}}\",\n  \"password\": \"{{tech_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate as Tech Head.\n\n**Note:** Ensure a TECH_HEAD test user exists in the database."
+          },
+          "response": [
+            {
+              "name": "200 - Successful Login",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"token\": \"<jwt_token>\",\n  \"role\": \"TECH_HEAD\",\n  \"message\": \"Welcome Tech Head\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login - Receptionist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.token);",
+                  "    pm.test('Receptionist login successful', function() {",
+                  "        pm.expect(jsonData.role).to.equal('RECEPTIONIST');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{reception_email}}\",\n  \"password\": \"{{reception_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate as Receptionist."
+          },
+          "response": [
+            {
+              "name": "200 - Successful Login",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"token\": \"<jwt_token>\",\n  \"role\": \"RECEPTIONIST\",\n  \"message\": \"Welcome Receptionist\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login - Invalid Credentials",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nonexistent@atlas.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Test login with invalid credentials. Should return 401."
+          },
+          "response": [
+            {
+              "name": "401 - Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Invalid email or password\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login - Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Test login with empty body. Should return 422 validation error."
+          },
+          "response": [
+            {
+              "name": "422 - Validation Error",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"missing\",\n      \"loc\": [\"body\", \"email\"],\n      \"msg\": \"Field required\"\n    },\n    {\n      \"type\": \"missing\",\n      \"loc\": [\"body\", \"password\"],\n      \"msg\": \"Field required\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Current User (GET /api/auth/me)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Current user returned', function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    pm.expect(jsonData.user).to.have.property('email');",
+                  "    pm.expect(jsonData.user).to.have.property('role');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get the currently authenticated user's profile.\n\n**Auth:** Bearer Token required\n**Roles:** Any authenticated user"
+          },
+          "response": [
+            {
+              "name": "200 - Current User",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"user\": {\n    \"user_id\": \"a477f9e7-36dc-48f5-94ad-f126d481c926\",\n    \"email\": \"admin@atlas.com\",\n    \"first_name\": \"System\",\n    \"last_name\": \"Admin\",\n    \"role\": \"SYSTEM_ADMIN\",\n    \"is_active\": true\n  }\n}"
+            },
+            {
+              "name": "401 - No Token",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Not authenticated\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Protected",
+      "description": "General protected endpoints accessible to any authenticated user",
+      "item": [
+        {
+          "name": "Protected Endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Protected endpoint accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    pm.expect(jsonData.message).to.include('protected endpoint');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/protected",
+              "host": ["{{base_url}}"],
+              "path": ["api", "protected"]
+            },
+            "description": "Access a generic protected endpoint. Returns a personalized greeting.\n\n**Auth:** Bearer Token required\n**Roles:** Any authenticated user"
+          },
+          "response": [
+            {
+              "name": "200 - Protected Access",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Hello System, you have accessed a protected endpoint!\",\n  \"user_id\": \"a477f9e7-36dc-48f5-94ad-f126d481c926\",\n  \"email\": \"admin@atlas.com\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Protected User Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User profile returned', function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    pm.expect(jsonData.user).to.have.all.keys('user_id', 'email', 'first_name', 'last_name', 'role', 'is_active');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/protected/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "protected", "me"]
+            },
+            "description": "Get detailed user profile via the protected route.\n\n**Auth:** Bearer Token required\n**Roles:** Any authenticated user"
+          },
+          "response": [
+            {
+              "name": "200 - User Profile",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"user\": {\n    \"user_id\": \"a477f9e7-36dc-48f5-94ad-f126d481c926\",\n    \"email\": \"admin@atlas.com\",\n    \"first_name\": \"System\",\n    \"last_name\": \"Admin\",\n    \"role\": \"SYSTEM_ADMIN\",\n    \"is_active\": true\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Admin-only endpoints requiring SYSTEM_ADMIN role",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin dashboard accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.dashboard).to.equal('admin');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "dashboard"]
+            },
+            "description": "Access the System Admin dashboard.\n\n**Auth:** Bearer Token required\n**Roles:** SYSTEM_ADMIN only\n**Returns 403** for non-admin roles"
+          },
+          "response": [
+            {
+              "name": "200 - Admin Dashboard",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Welcome to Admin Dashboard, System!\",\n  \"user_id\": \"a477f9e7-36dc-48f5-94ad-f126d481c926\",\n  \"email\": \"admin@atlas.com\",\n  \"role\": \"SYSTEM_ADMIN\",\n  \"dashboard\": \"admin\"\n}"
+            },
+            {
+              "name": "403 - Forbidden (Wrong Role)",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"detail\": \"Operation not permitted\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Admin Endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin endpoint accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.role).to.equal('SYSTEM_ADMIN');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin"]
+            },
+            "description": "Access the admin-only endpoint.\n\n**Auth:** Bearer Token required\n**Roles:** SYSTEM_ADMIN only"
+          },
+          "response": [
+            {
+              "name": "200 - Admin Access",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Welcome System Admin System!\",\n  \"user_id\": \"a477f9e7-36dc-48f5-94ad-f126d481c926\",\n  \"email\": \"admin@atlas.com\",\n  \"role\": \"SYSTEM_ADMIN\"\n}"
+            },
+            {
+              "name": "403 - Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"detail\": \"Operation not permitted\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HR",
+      "description": "HR department endpoints requiring HR_ADMIN or SYSTEM_ADMIN role",
+      "item": [
+        {
+          "name": "HR Dashboard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HR dashboard accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.dashboard).to.equal('hr');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/hr/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "hr", "dashboard"]
+            },
+            "description": "Access the HR Admin dashboard.\n\n**Auth:** Bearer Token required\n**Roles:** HR_ADMIN, SYSTEM_ADMIN\n**Returns 403** for other roles"
+          },
+          "response": [
+            {
+              "name": "200 - HR Dashboard",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Welcome to HR Dashboard, HR!\",\n  \"user_id\": \"<uuid>\",\n  \"email\": \"hr.admin@atlas.com\",\n  \"role\": \"HR_ADMIN\",\n  \"dashboard\": \"hr\"\n}"
+            },
+            {
+              "name": "403 - Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"detail\": \"Operation not permitted\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tech",
+      "description": "Technology department endpoints requiring TECH_HEAD or SYSTEM_ADMIN role",
+      "item": [
+        {
+          "name": "Tech Dashboard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tech dashboard accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.dashboard).to.equal('tech');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/tech/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tech", "dashboard"]
+            },
+            "description": "Access the Tech Head dashboard.\n\n**Auth:** Bearer Token required\n**Roles:** TECH_HEAD, SYSTEM_ADMIN\n**Returns 403** for other roles"
+          },
+          "response": [
+            {
+              "name": "200 - Tech Dashboard",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Welcome to Tech Dashboard, Tech!\",\n  \"user_id\": \"<uuid>\",\n  \"email\": \"tech.head@atlas.com\",\n  \"role\": \"TECH_HEAD\",\n  \"dashboard\": \"tech\"\n}"
+            },
+            {
+              "name": "403 - Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"detail\": \"Operation not permitted\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reception",
+      "description": "Reception endpoints requiring RECEPTIONIST or SYSTEM_ADMIN role",
+      "item": [
+        {
+          "name": "Reception Dashboard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Reception dashboard accessible', function() {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.dashboard).to.equal('reception');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reception/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reception", "dashboard"]
+            },
+            "description": "Access the Receptionist dashboard.\n\n**Auth:** Bearer Token required\n**Roles:** RECEPTIONIST, SYSTEM_ADMIN\n**Returns 403** for other roles"
+          },
+          "response": [
+            {
+              "name": "200 - Reception Dashboard",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Welcome to Reception Dashboard, Reception!\",\n  \"user_id\": \"<uuid>\",\n  \"email\": \"reception@atlas.com\",\n  \"role\": \"RECEPTIONIST\",\n  \"dashboard\": \"reception\"\n}"
+            },
+            {
+              "name": "403 - Forbidden",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"detail\": \"Operation not permitted\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JWT Tests",
+      "description": "JWT token validation test scenarios",
+      "item": [
+        {
+          "name": "Valid Token Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test with a valid JWT token. Should return 200 with user data."
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Token Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalidtoken12345"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test with an invalid JWT token. Should return 401."
+          },
+          "response": [
+            {
+              "name": "401 - Invalid Token",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Could not validate credentials\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Missing Token Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test without any Authorization header. Should return 401."
+          },
+          "response": [
+            {
+              "name": "401 - Not Authenticated",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Not authenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Empty Bearer Token Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test with an empty Bearer token. Should return 401."
+          },
+          "response": [
+            {
+              "name": "401 - Empty Token",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"detail\": \"Could not validate credentials\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Root",
+      "description": "Root API endpoint",
+      "item": [
+        {
+          "name": "Root - API Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Root endpoint. Returns API welcome message and documentation links.\n\n**Auth:** None required"
+          },
+          "response": [
+            {
+              "name": "200 - Welcome",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Welcome to ATLAS Interview Management System API\",\n  \"docs\": \"/docs\",\n  \"redoc\": \"/redoc\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

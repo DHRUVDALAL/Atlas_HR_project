@@ -1,0 +1,76 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from database.connection import get_db
+from models.user import User
+from models.role import Role
+from services.auth_service import authenticate_user, update_last_login, create_access_token_for_user
+from middleware.auth import get_current_user
+from schemas.auth import LoginRequest, TokenResponse, UserResponse
+import os
+from datetime import timedelta
+
+router = APIRouter(
+    prefix="/api/auth",
+    tags=["auth"]
+)
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+
+@router.post("/login", response_model=TokenResponse)
+def login(user_credentials: LoginRequest, db: Session = Depends(get_db)):
+    email = user_credentials.email
+    password = user_credentials.password
+    
+    user = authenticate_user(db, email, password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Update last login
+    update_last_login(db, str(user.user_id))
+    
+    # Create access token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token_for_user(
+        user, expires_delta=access_token_expires
+    )
+    
+    # Determine welcome message based on role
+    role_name = user.role.role_name
+    welcome_messages = {
+        "SYSTEM_ADMIN": "Welcome System Admin",
+        "HR_ADMIN": "Welcome HR Admin",
+        "RECEPTIONIST": "Welcome Receptionist",
+        "TECH_HEAD": "Welcome Tech Head",
+        "L1_PANEL": "Welcome L1 Panel",
+        "L2_PANEL": "Welcome L2 Panel",
+        "HR_PANEL": "Welcome HR Panel"
+    }
+    message = welcome_messages.get(role_name, f"Welcome {role_name}")
+    
+    return TokenResponse(
+        success=True,
+        token=access_token,
+        role=role_name,
+        message=message
+    )
+
+@router.get("/me", response_model=dict)
+def read_current_user(current_user: User = Depends(get_current_user)):
+    user_data = UserResponse(
+        user_id=str(current_user.user_id),
+        email=current_user.email,
+        first_name=current_user.first_name,
+        last_name=current_user.last_name,
+        role=current_user.role.role_name,
+        is_active=current_user.is_active
+    )
+    return {
+        "success": True,
+        "user": user_data.model_dump()
+    }
