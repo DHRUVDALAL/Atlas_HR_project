@@ -1,0 +1,481 @@
+{
+  "info": {
+    "name": "ATLAS - Applicant Form API Collection",
+    "description": "Complete API collection for the ATLAS Applicant Form Intake Module.\n\nEndpoints:\n- Create Draft Application\n- List Applicants\n- Get Applicant by ID\n- Update Draft Application\n- Submit Application\n- Upload Signature PDF\n\nWorkflow:\n1. Create a draft → 2. Update sections → 3. Upload signature → 4. Submit",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "applicant_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Draft Application (Full)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"personal_details\": {\n    \"first_name\": \"Rahul\",\n    \"middle_name\": \"Kumar\",\n    \"last_name\": \"Sharma\",\n    \"email\": \"rahul.sharma@example.com\",\n    \"phone\": \"9876543210\",\n    \"alternate_phone\": \"9123456780\",\n    \"gender\": \"MALE\",\n    \"date_of_birth\": \"1995-06-15\",\n    \"current_address\": \"123 MG Road, Andheri West\",\n    \"permanent_address\": \"456 Station Road, Pune\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"country\": \"India\",\n    \"pincode\": \"400058\"\n  },\n  \"professional_details\": {\n    \"current_company\": \"Infosys Ltd\",\n    \"current_designation\": \"Senior Software Engineer\",\n    \"total_experience\": 5.5,\n    \"relevant_experience\": 4.0,\n    \"current_ctc\": 1200000,\n    \"expected_ctc\": 1800000,\n    \"notice_period\": \"30 days\",\n    \"joining_availability\": \"Immediate after notice\",\n    \"preferred_location\": \"Mumbai\",\n    \"employment_type\": \"FULL_TIME\"\n  },\n  \"employment_history\": [\n    {\n      \"company_name\": \"Wipro Technologies\",\n      \"designation\": \"Software Developer\",\n      \"start_date\": \"2019-07-01\",\n      \"end_date\": \"2022-06-30\",\n      \"responsibilities\": \"Full stack development using Python and React. Led a team of 4 developers.\",\n      \"reason_for_leaving\": \"Career advancement\"\n    },\n    {\n      \"company_name\": \"TCS\",\n      \"designation\": \"Junior Developer\",\n      \"start_date\": \"2017-06-15\",\n      \"end_date\": \"2019-06-28\",\n      \"responsibilities\": \"Backend API development and database management.\",\n      \"reason_for_leaving\": \"Better opportunity\"\n    }\n  ],\n  \"education\": [\n    {\n      \"qualification\": \"B.Tech in Computer Science\",\n      \"institution_name\": \"VJTI Mumbai\",\n      \"university\": \"Mumbai University\",\n      \"passing_year\": 2017,\n      \"percentage\": 85.5,\n      \"grade\": \"A\",\n      \"specialization\": \"Computer Science\"\n    },\n    {\n      \"qualification\": \"HSC\",\n      \"institution_name\": \"Ryan International School\",\n      \"university\": \"Maharashtra Board\",\n      \"passing_year\": 2013,\n      \"percentage\": 92.0,\n      \"grade\": \"A+\",\n      \"specialization\": \"Science\"\n    }\n  ],\n  \"personality_assessment\": [\n    {\"question_number\": 1, \"rating\": 4},\n    {\"question_number\": 2, \"rating\": 5},\n    {\"question_number\": 3, \"rating\": 3},\n    {\"question_number\": 4, \"rating\": 4},\n    {\"question_number\": 5, \"rating\": 5}\n  ],\n  \"situational_responses\": [\n    {\"question_number\": 1, \"selected_option\": \"A\"},\n    {\"question_number\": 2, \"selected_option\": \"C\"},\n    {\"question_number\": 3, \"selected_option\": \"B\"},\n    {\"question_number\": 4, \"selected_option\": \"D\"},\n    {\"question_number\": 5, \"selected_option\": \"A\"}\n  ],\n  \"written_responses\": [\n    {\n      \"question_number\": 1,\n      \"answer_text\": \"I believe in continuous learning and adapting to new technologies. My approach to professional development involves regular self-study and active participation in team knowledge-sharing sessions.\"\n    },\n    {\n      \"question_number\": 2,\n      \"answer_text\": \"My greatest professional achievement was leading the migration of a legacy monolithic application to a microservices architecture, which improved system performance by 40% and reduced deployment time from hours to minutes.\"\n    }\n  ],\n  \"declaration\": {\n    \"declaration_accepted\": true,\n    \"consent_accepted\": true,\n    \"signed_date\": \"2026-06-22\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"]
+        },
+        "description": "Creates a new draft application with all 8 sections filled. Returns the created applicant with generated application_number."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response has success true', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "});",
+              "",
+              "pm.test('Application number is generated', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.application_number).to.match(/^ATLAS-APP-/);",
+              "});",
+              "",
+              "pm.test('Status is DRAFT', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.status).to.eql('DRAFT');",
+              "});",
+              "",
+              "// Save applicant_id for subsequent requests",
+              "var jsonData = pm.response.json();",
+              "if (jsonData.data && jsonData.data.applicant_id) {",
+              "    pm.collectionVariables.set('applicant_id', jsonData.data.applicant_id);",
+              "    pm.environment.set('applicant_id', jsonData.data.applicant_id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "2. Create Minimal Draft (Section 1 Only)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"personal_details\": {\n    \"first_name\": \"Priya\",\n    \"last_name\": \"Patel\",\n    \"email\": \"priya.patel@example.com\",\n    \"phone\": \"9988776655\",\n    \"gender\": \"FEMALE\",\n    \"date_of_birth\": \"1998-03-20\",\n    \"current_address\": \"789 Carter Road, Bandra\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"country\": \"India\",\n    \"pincode\": \"400050\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"]
+        },
+        "description": "Creates a minimal draft application with only Section 1 (Personal Details). Other sections can be added later via PUT."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Professional details is null', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.professional_details).to.eql(null);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "3. List All Applicants",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants?skip=0&limit=20",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"],
+          "query": [
+            {"key": "skip", "value": "0"},
+            {"key": "limit", "value": "20"}
+          ]
+        },
+        "description": "Returns a paginated list of all applicants."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has applicants array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.applicants).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Response has total count', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.total).to.be.a('number');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "4. List Applicants by Status (DRAFT)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants?status=DRAFT&skip=0&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"],
+          "query": [
+            {"key": "status", "value": "DRAFT"},
+            {"key": "skip", "value": "0"},
+            {"key": "limit", "value": "10"}
+          ]
+        },
+        "description": "Returns applicants filtered by DRAFT status."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('All applicants have DRAFT status', function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.applicants.forEach(function(app) {",
+              "        pm.expect(app.status).to.eql('DRAFT');",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "5. Get Applicant by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants/{{applicant_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "{{applicant_id}}"]
+        },
+        "description": "Returns the full applicant record with all sections."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has all sections', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('personal_details').or.have.property('first_name');",
+              "    pm.expect(jsonData.data).to.have.property('employment_history');",
+              "    pm.expect(jsonData.data).to.have.property('education');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "6. Update Draft Application",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"professional_details\": {\n    \"current_company\": \"Updated Company Name\",\n    \"current_designation\": \"Lead Engineer\",\n    \"total_experience\": 6.0,\n    \"relevant_experience\": 5.0,\n    \"current_ctc\": 1500000,\n    \"expected_ctc\": 2200000,\n    \"notice_period\": \"60 days\",\n    \"joining_availability\": \"After notice period\",\n    \"preferred_location\": \"Bangalore\",\n    \"employment_type\": \"FULL_TIME\"\n  },\n  \"personality_assessment\": [\n    {\"question_number\": 1, \"rating\": 5},\n    {\"question_number\": 2, \"rating\": 4},\n    {\"question_number\": 3, \"rating\": 5}\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants/{{applicant_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "{{applicant_id}}"]
+        },
+        "description": "Updates specific sections of a DRAFT application. Only provided sections are replaced."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Professional details updated', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.professional_details.current_company).to.eql('Updated Company Name');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "7. Upload Signature PDF",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "",
+              "description": "Select a PDF file (max 5 MB)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants/{{applicant_id}}/signature",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "{{applicant_id}}", "signature"]
+        },
+        "description": "Uploads a digital signature as PDF. Select a PDF file from your system."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Document type is SIGNATURE_PDF', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.document_type).to.eql('SIGNATURE_PDF');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "8. Submit Application",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants/{{applicant_id}}/submit",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "{{applicant_id}}", "submit"]
+        },
+        "description": "Submits the DRAFT application. Validates that professional details and declaration (both accepted) are present."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Status changed to SUBMITTED', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.status).to.eql('SUBMITTED');",
+              "});",
+              "",
+              "pm.test('Success message received', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include('submitted');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "9. [NEG] Get Non-existent Applicant",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants/00000000-0000-0000-0000-000000000000",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "00000000-0000-0000-0000-000000000000"]
+        },
+        "description": "Negative test: should return 404."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "10. [NEG] Create with Invalid Email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"personal_details\": {\n    \"first_name\": \"Test\",\n    \"last_name\": \"Invalid\",\n    \"email\": \"not-an-email\",\n    \"phone\": \"9876543210\",\n    \"gender\": \"MALE\",\n    \"date_of_birth\": \"1995-01-01\",\n    \"current_address\": \"Test Address\",\n    \"city\": \"Test\",\n    \"state\": \"Test\",\n    \"country\": \"India\",\n    \"pincode\": \"400001\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"]
+        },
+        "description": "Negative test: invalid email should return 422."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 422', function () {",
+              "    pm.response.to.have.status(422);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "11. [NEG] Create with Invalid Rating",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"personal_details\": {\n    \"first_name\": \"Test\",\n    \"last_name\": \"Rating\",\n    \"email\": \"test.rating@example.com\",\n    \"phone\": \"9876543210\",\n    \"gender\": \"MALE\",\n    \"date_of_birth\": \"1995-01-01\",\n    \"current_address\": \"Test Address\",\n    \"city\": \"Test\",\n    \"state\": \"Test\",\n    \"country\": \"India\",\n    \"pincode\": \"400001\"\n  },\n  \"personality_assessment\": [\n    {\"question_number\": 1, \"rating\": 7}\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/applicants",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants"]
+        },
+        "description": "Negative test: rating > 5 should return 422."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 422', function () {",
+              "    pm.response.to.have.status(422);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "12. [NEG] Submit Incomplete Application",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/applicants/{{applicant_id}}/submit",
+          "host": ["{{base_url}}"],
+          "path": ["api", "applicants", "{{applicant_id}}", "submit"]
+        },
+        "description": "Negative test: submitting an already-submitted application should return 400."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "applicant-form-env",
+  "name": "ATLAS Applicant Form - Local",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "applicant_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
