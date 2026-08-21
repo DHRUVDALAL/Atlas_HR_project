@@ -1,0 +1,17 @@
+node_modules/
+.output/
+.tanstack/
+.wrangler/
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+*.local
+*.md
+.vscode/
+.idea/
+dist/
+build/
+coverage/
+.pytest_cache/
