@@ -3,6 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Briefcase, ClipboardCheck, ExternalLink, Download, MapPin, Building, Calendar, Phone, Mail, GraduationCap, Clock, FileText, CheckCircle2, ChevronRight, Star } from "lucide-react";
 import { format } from "date-fns";
 import type { CandidateDetail } from "@/lib/types";
+import { PERSONALITY_QUESTIONS, SITUATIONAL_QUESTIONS, WRITTEN_QUESTIONS } from "@/routes/register-candidate";
+
 
 function Field({ label, value, icon }: { label: string; value: React.ReactNode; icon?: React.ReactNode }) {
   if (!value) return null;
@@ -320,8 +322,8 @@ export function CandidateProfileTabs({ data }: { data: any }) {
                     <div className="space-y-4">
                       {data.personality_assessment.map((a: any, i: number) => (
                         <div key={i} className="bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
-                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{a.question_text}</div>
-                          <div className="text-sm text-[#86868b]">Rating: <span className="font-bold text-[#1d1d1f]">{a.rating_value}/5</span></div>
+                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{PERSONALITY_QUESTIONS[a.question_number - 1] || "Unknown Question"}</div>
+                          <div className="text-sm text-[#86868b]">Rating: <span className="font-bold text-[#1d1d1f]">{a.rating}/5</span></div>
                         </div>
                       ))}
                     </div>
@@ -339,8 +341,8 @@ export function CandidateProfileTabs({ data }: { data: any }) {
                     <div className="space-y-6">
                       {data.situational_responses.map((s: any, i: number) => (
                         <div key={i} className="bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
-                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{s.scenario_text}</div>
-                          <div className="text-sm text-[#86868b] leading-relaxed">Response: {s.response_text}</div>
+                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{SITUATIONAL_QUESTIONS[s.question_number - 1]?.prompt || "Unknown Scenario"}</div>
+                          <div className="text-sm text-[#86868b] leading-relaxed">Response: {s.selected_option}. {SITUATIONAL_QUESTIONS[s.question_number - 1]?.options[s.selected_option?.charCodeAt(0) - 65] || ""}</div>
                         </div>
                       ))}
                     </div>
@@ -358,8 +360,8 @@ export function CandidateProfileTabs({ data }: { data: any }) {
                     <div className="space-y-6">
                       {data.written_responses.map((w: any, i: number) => (
                         <div key={i} className="bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
-                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{w.question_text}</div>
-                          <div className="text-sm text-[#86868b] leading-relaxed">Response: {w.response_text}</div>
+                          <div className="text-sm font-bold text-[#1d1d1f] mb-2">{WRITTEN_QUESTIONS[w.question_number - 1] || "Unknown Question"}</div>
+                          <div className="text-sm text-[#86868b] leading-relaxed">Response: {w.answer_text}</div>
                         </div>
                       ))}
                     </div>

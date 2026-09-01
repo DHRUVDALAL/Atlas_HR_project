@@ -55,7 +55,7 @@ export const Route = createFileRoute("/register-candidate")({
 
 const DRAFT_KEY = "candidate_form_draft";
 
-const PERSONALITY_QUESTIONS = [
+export const PERSONALITY_QUESTIONS = [
   "I am comfortable presenting my point of view to people senior to me.",
   "I can usually tell when someone around me is having a difficult day, even if they haven’t said anything.",
   "When something goes wrong, my first instinct is to look for what I can fix rather than who is responsible.",
@@ -76,7 +76,7 @@ const PERSONALITY_QUESTIONS = [
   "I actively seek feedback rather than waiting for it to come to me.",
 ];
 
-const SITUATIONAL_QUESTIONS = [
+export const SITUATIONAL_QUESTIONS = [
   {
     prompt:
       "Your team is behind on a critical deadline. A colleague responsible for a key deliverable has been struggling. When you ask about progress, they seem stressed and defensive.",
@@ -129,7 +129,7 @@ const SITUATIONAL_QUESTIONS = [
   },
 ];
 
-const WRITTEN_QUESTIONS = [
+export const WRITTEN_QUESTIONS = [
   "Tell us about a time someone gave you feedback that was hard to hear. How did you respond, and what did you take away from it?",
   "What does “taking responsibility” look like in practice? Share an example from your experience.",
   "Describe a moment when you went out of your way to help a colleague without being asked. What prompted you to act?",
@@ -1751,3 +1751,4 @@ function blankEducation(): EducationRow {
 function patchArr<T>(setter: (v: T[]) => void, arr: T[], i: number, patch: Partial<T>) {
   setter(arr.map((row, x) => (x === i ? { ...row, ...patch } : row)));
 }
+
