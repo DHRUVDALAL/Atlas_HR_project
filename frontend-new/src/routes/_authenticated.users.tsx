@@ -227,7 +227,8 @@ function UserModal({ user, roles, onClose, onSuccess }: any) {
     mutationFn: async () => {
       if (isEdit) {
         // Exclude empty password on edit
-        const payload = { ...formData };
+        const payload: any = { ...formData };
+        if (payload.secondary_role_id === 'none') payload.secondary_role_id = null;
         if (!payload.password) delete payload.password;
         return api(`/api/users/${user.user_id}`, {
           method: "PUT",
@@ -236,7 +237,7 @@ function UserModal({ user, roles, onClose, onSuccess }: any) {
       } else {
         return api("/api/users", {
           method: "POST",
-          body: formData,
+          body: { ...formData, secondary_role_id: formData.secondary_role_id === 'none' ? null : formData.secondary_role_id },
         });
       }
     },

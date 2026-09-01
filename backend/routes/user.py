@@ -49,6 +49,7 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         user_id=uuid.uuid4(),
         role_id=payload.role_id,
+        secondary_role_id=payload.secondary_role_id,
         employee_code=payload.employee_code,
         first_name=payload.first_name,
         last_name=payload.last_name,
@@ -116,6 +117,17 @@ def update_user(user_id: uuid.UUID, payload: UserUpdate, db: Session = Depends(g
         if not role:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Role not found")
         user.role_id = payload.role_id
+        
+    if hasattr(payload, 'secondary_role_id') and payload.secondary_role_id is not None:
+        sec_role = db.query(Role).filter(Role.role_id == payload.secondary_role_id).first()
+        if not sec_role:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Secondary role not found")
+        user.secondary_role_id = payload.secondary_role_id
+    elif hasattr(payload, 'secondary_role_id') and payload.secondary_role_id is None:
+        # Check if it was explicitly set to None (meaning remove secondary role)
+        # In Pydantic v2, we can check model_fields_set to know if it was explicitly sent as None
+        if 'secondary_role_id' in payload.model_fields_set:
+            user.secondary_role_id = None
         
     if payload.department is not None:
         user.department = payload.department
