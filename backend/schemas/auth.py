@@ -14,6 +14,7 @@ class TokenResponse(BaseModel):
     token: str
     refresh_token: str
     role: str
+    secondary_role: Optional[str] = None
     message: str
 
 class RefreshRequest(BaseModel):
@@ -30,6 +31,7 @@ class UserResponse(BaseModel):
     first_name: str
     last_name: str
     role: str
+    secondary_role: Optional[str] = None
     is_active: bool
 
     model_config = {

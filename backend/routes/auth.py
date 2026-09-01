@@ -68,6 +68,7 @@ def login(request: Request, user_credentials: LoginRequest, db: Session = Depend
         token=access_token,
         refresh_token=refresh_token,
         role=role_name,
+        secondary_role=user.secondary_role.role_name if user.secondary_role else None,
         message=message
     )
 
@@ -121,6 +122,7 @@ def read_current_user(current_user: User = Depends(get_current_user)):
         first_name=current_user.first_name,
         last_name=current_user.last_name,
         role=current_user.role.role_name,
+        secondary_role=current_user.secondary_role.role_name if current_user.secondary_role else None,
         is_active=current_user.is_active
     )
     return {

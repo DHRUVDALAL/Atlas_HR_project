@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               first_name: string;
               last_name: string;
               role: string;
+              secondary_role?: string;
             };
             permissions: string[];
           }>("/api/auth/me");
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               email: res.user.email,
               first_name: res.user.first_name,
               last_name: res.user.last_name,
-              roles: [res.user.role as Role],
+              roles: [res.user.role, res.user.secondary_role].filter(Boolean) as Role[],
               permissions: res.permissions || [],
             };
             setStoredUser(authUser);
@@ -88,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token: string;
       refresh_token: string;
       role: string;
+              secondary_role?: string;
       message: string;
     }>("/api/auth/login", {
       method: "POST",
@@ -109,6 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         first_name: string;
         last_name: string;
         role: string;
+              secondary_role?: string;
       };
       permissions: string[];
     }>("/api/auth/me");
@@ -118,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: meRes.user.email,
       first_name: meRes.user.first_name,
       last_name: meRes.user.last_name,
-      roles: [meRes.user.role as Role],
+      roles: [meRes.user.role, meRes.user.secondary_role].filter(Boolean) as Role[],
       permissions: meRes.permissions || [],
     };
 

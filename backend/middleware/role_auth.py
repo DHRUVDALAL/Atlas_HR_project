@@ -5,10 +5,13 @@ from models.user import User
 
 
 def get_user_permissions(user: User) -> set:
-    """Return the set of permission codes granted to a user via its role."""
-    if not user.role:
-        return set()
-    return {p.code for p in user.role.permissions}
+    """Return the set of permission codes granted to a user via its roles."""
+    perms = set()
+    if user.role:
+        perms.update(p.code for p in user.role.permissions)
+    if user.secondary_role:
+        perms.update(p.code for p in user.secondary_role.permissions)
+    return perms
 
 
 def require_permission(*codes: str):
