@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Briefcase, ExternalLink, Download, MapPin, Building, Calendar, Phone, Mail, GraduationCap, Clock, FileText, CheckCircle2, ChevronRight, Star } from "lucide-react";
+import { User, Briefcase, ClipboardCheck, ExternalLink, Download, MapPin, Building, Calendar, Phone, Mail, GraduationCap, Clock, FileText, CheckCircle2, ChevronRight, Star } from "lucide-react";
 import { format } from "date-fns";
 import type { CandidateDetail } from "@/lib/types";
 
@@ -371,6 +371,7 @@ export function CandidateProfileTabs({ data }: { data: any }) {
 </Tabs>
   );
 }
+
 
 
 
