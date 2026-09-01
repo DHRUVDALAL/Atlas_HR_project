@@ -131,11 +131,11 @@ function EmailManagementPage() {
         
         <div className="flex flex-col">
           {history?.items?.map((item: any) => (
-            <div key={item.history_id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-8 py-5 border-b border-gray-50/50 hover:bg-[#f5f5f7]/60 transition-colors">
+            <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-8 py-5 border-b border-gray-50/50 hover:bg-[#f5f5f7]/60 transition-colors">
               <div className="min-w-0 pr-4">
                 <div className="text-sm font-bold text-[#1d1d1f] truncate">{item.subject}</div>
                 <div className="text-xs font-medium text-[#86868b] truncate mt-0.5">
-                  To: {item.to_email}
+                  To: {item.recipient_email}
                 </div>
               </div>
               
@@ -172,3 +172,4 @@ function EmailManagementPage() {
     </motion.div>
   );
 }
+

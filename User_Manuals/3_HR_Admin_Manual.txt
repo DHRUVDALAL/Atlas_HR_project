@@ -1,0 +1,84 @@
+# ATLAS HR SYSTEM - HR ADMIN USER MANUAL
+
+---
+## SLIDE 1: Title Slide
+**Headline:** ATLAS HR System - HR Admin Guide
+**Sub-headline:** Orchestrating the Recruitment Lifecycle
+**Footer:** Abhiyanta India Solutions
+
+---
+## SLIDE 2: Introduction
+**Headline:** Your Role in ATLAS
+**Content:** 
+As an HR Admin, you are the core operator of the ATLAS system. You manage the entire recruitment pipeline—from reviewing incoming applications and scheduling interviews to triggering automated emails and processing final offer letters. 
+
+---
+## SLIDE 3: System Login
+**Headline:** Accessing the HR Portal
+**Content:**
+1. Navigate to the ATLAS secure portal.
+2. Enter your assigned Corporate Email ID.
+3. Enter your secure Password.
+4. Click "Login".
+*(Visual Note to Designer: Add a placeholder box here for a screenshot of the Login Screen)*
+
+---
+## SLIDE 4: The HR Master Dashboard
+**Headline:** Overview & Analytics
+**Content:**
+The HR Dashboard gives you a bird's-eye view of the recruitment pipeline.
+- **Pipeline Metrics:** Track total applicants, interviews scheduled, and offers extended.
+- **Recent Activity:** See real-time updates of candidates arriving at reception or interviewers submitting feedback.
+- **Action Items:** Quick alerts for applications requiring your immediate screening.
+
+---
+## SLIDE 5: Screening Applications
+**Headline:** Managing New Candidates
+**Content:**
+When a candidate submits an application on the landing page:
+1. Navigate to the **"Applications"** tab.
+2. Review their resume and details.
+3. Update their status to **"Shortlisted for L1"** or **"Rejected"**.
+4. The system will automatically send a status update email to the candidate based on your decision.
+
+---
+## SLIDE 6: Scheduling Interviews
+**Headline:** Assigning the Technical Panel
+**Content:**
+For shortlisted candidates:
+1. Click **"Schedule Interview"** on the candidate's profile.
+2. Select the Date, Time, and Interview Mode (In-person / Virtual).
+3. Assign an **Interviewer (L1 Panel)** from the dropdown list.
+4. Click Save. The system will automatically email the candidate with the interview details and notify the assigned panel member.
+
+---
+## SLIDE 7: Reviewing Feedback
+**Headline:** Making Data-Driven Decisions
+**Content:**
+Once an interview is completed:
+1. Navigate to the **"Interview Feedback"** section.
+2. Read the detailed notes and scores submitted by the L1 Panel.
+3. Review their final recommendation (Shortlist/Reject).
+4. Decide to either schedule an L2 interview, extend an offer, or reject the candidate.
+
+---
+## SLIDE 8: Offers & Document Verification
+**Headline:** Finalizing the Hire
+**Content:**
+For selected candidates:
+1. Move the candidate to the **"Offer Extended"** stage.
+2. Use the system to generate and track the Offer Letter.
+3. Track the candidate's document uploads (e.g., ID proofs, past experience letters).
+4. Once documents are verified, finalize their Joining Date.
+
+---
+## SLIDE 9: Automated Emails
+**Headline:** Communication at Scale
+**Content:**
+ATLAS handles candidate communication automatically!
+Emails are sent automatically when:
+- An application is received.
+- An interview is scheduled or rescheduled.
+- A final offer is extended.
+- Documents are requested.
+*Always ensure candidate email addresses are accurate to prevent delivery failures.*

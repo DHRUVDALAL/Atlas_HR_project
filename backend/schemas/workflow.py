@@ -48,6 +48,7 @@ class CEOReviewRequest(BaseModel):
     remarks: str = Field(..., min_length=5, max_length=2000)
     evaluation_data: Dict[str, Any] = Field(default={})
     save_draft: bool = True
+    ceo_status: str = "SELECT"
 
 
 class FinalDecisionRequest(BaseModel):

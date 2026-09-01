@@ -130,8 +130,7 @@ def process_email_queue(db: Session, limit: int = 10) -> List[str]:
 
             history.status = "sent"
             history.sent_at = datetime.now(timezone.utc)
-            item.attempts += 1
-            item.locked = False
+            db.delete(item)
             db.flush()
             results.append(f"sent:{history.id}")
 

@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Country, State } from "country-state-city";
-import type { ICountry, IState } from "country-state-city";
+import { Country, State, City } from "country-state-city";
+import type { ICountry, IState, ICity } from "country-state-city";
 
 function SearchableSelect({
   label,
@@ -136,7 +136,40 @@ export function LocationSelect({
 }: LocationSelectProps) {
   const [countries] = useState<ICountry[]>(() => Country.getAllCountries());
   const [states, setStates] = useState<IState[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
   const [loadingStates, setLoadingStates] = useState(false);
+
+  
+  useEffect(() => {
+    if (country && state) {
+      const stateObj = states.find((s) => s.name === state);
+      if (stateObj) {
+        setCities(City.getCitiesOfState(country, stateObj.isoCode));
+        if (city && !City.getCitiesOfState(country, stateObj.isoCode).find((c) => c.name === city)) {
+          onCityChange('');
+          onPincodeChange('');
+        }
+      }
+    } else {
+      setCities([]);
+    }
+  }, [country, state, states]);
+
+  const cityOptions = useMemo(
+    () => cities.map((c) => ({ value: c.name, label: c.name })),
+    [cities]
+  );
+  
+  const pincodeOptions = useMemo(
+    () => [
+      { value: "411038", label: "411038 (Kothrud)" },
+      { value: "411001", label: "411001 (Pune)" },
+      { value: "411004", label: "411004 (Deccan)" },
+      { value: "411014", label: "411014 (Viman Nagar)" },
+      { value: "411057", label: "411057 (Hinjewadi)" }
+    ],
+    []
+  );
 
   const countryOptions = useMemo(
     () =>
@@ -221,37 +254,30 @@ export function LocationSelect({
         error={errors?.state}
       />
       
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold">
-          City <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          value={city}
-          onChange={(e) => onCityChange(e.target.value)}
-          placeholder={state ? "Enter city" : "Select state first"}
-          disabled={disabled || !state}
-          className={cn("h-9 rounded-lg", errors?.city && "border-destructive")}
-        />
-        {errors?.city && (
-          <p className="text-xs text-destructive">{errors.city}</p>
-        )}
-      </div>
+      <SearchableSelect
+        label="City"
+        value={city}
+        onValueChange={(v) => {
+          onCityChange(v);
+          onPincodeChange('');
+        }}
+        options={cityOptions}
+        placeholder={state ? "Select city" : "Select state first"}
+        disabled={disabled || !state}
+        required
+        error={errors?.city}
+      />
 
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold">
-          Pincode <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          value={pincode}
-          onChange={(e) => onPincodeChange(e.target.value)}
-          placeholder={city ? "Enter pincode" : "Enter city first"}
-          disabled={disabled || !city}
-          className={cn("h-9 rounded-lg", errors?.pincode && "border-destructive")}
-        />
-        {errors?.pincode && (
-          <p className="text-xs text-destructive">{errors.pincode}</p>
-        )}
-      </div>
+      <SearchableSelect
+        label="Pincode"
+        value={pincode}
+        onValueChange={onPincodeChange}
+        options={pincodeOptions}
+        placeholder={city ? "Select pincode" : "Select city first"}
+        disabled={disabled || !city}
+        required
+        error={errors?.pincode}
+      />
     </div>
   );
 }

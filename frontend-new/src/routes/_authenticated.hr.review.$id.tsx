@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { CandidateProfileTabs } from "@/components/candidate-profile-tabs";
 import { api } from "@/lib/api";
 import type { CandidateDetail, SapDomain, ExperienceBracket } from "@/lib/types";
 import { HR_DIMENSIONS, statusMeta } from "@/lib/scorecard";
@@ -42,7 +43,7 @@ function HrReview() {
   const { state, update, isComplete } = useScorecard(HR_DIMENSIONS);
   const [domain, setDomain] = useState("FI");
   const [experienceBracket, setExperienceBracket] = useState("0-3 yrs");
-  const [rounds, setRounds] = useState(2);
+  const [rounds, setRounds] = useState(1);
   const [hrStatus, setHrStatus] = useState<"SELECT" | "REJECT" | "HOLD">("SELECT");
   const [firstInterviewer, setFirstInterviewer] = useState("");
 
@@ -163,102 +164,7 @@ function HrReview() {
         </p>
       </div>
 
-      {/* Candidate Summary Card */}
-      {candidate && (
-        <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-          <div className="flex flex-col md:flex-row md:items-center gap-5">
-            <div className="h-16 w-16 rounded-full bg-[#f5f5f7] flex items-center justify-center text-xl font-bold text-[#1d1d1f] shrink-0 border-2 border-white shadow-sm">
-              <User className="h-6 w-6 text-[#1d1d1f]" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-xl font-bold tracking-tight text-[#1d1d1f] flex items-center gap-3">
-                {candidate.first_name} {candidate.last_name}
-                <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-[10px] font-bold tracking-wide uppercase ${statusMeta(candidate.status).className.replace('border-transparent', '')}`}>
-                  {statusMeta(candidate.status).label}
-                </span>
-              </div>
-              <div className="text-sm font-medium text-[#86868b] mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <span className="font-mono font-bold bg-[#f5f5f7] px-2 py-0.5 rounded-md text-[#1d1d1f]">{candidate.application_number}</span>
-                <span className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" /> {candidate.position_applied_for ?? "—"}</span>
-                <span>{candidate.email}</span>
-                <span>{candidate.phone}</span>
-                {candidate.applied_from && <span>via {candidate.applied_from}</span>}
-              </div>
-            </div>
-          </div>
-
-          <div className="h-px bg-gray-100 my-8" />
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4 text-sm">
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] flex items-center gap-1.5 mb-1.5">
-                <Briefcase className="h-3 w-3" /> Experience
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.total_experience
-                  ? `${candidate.professional_details.total_experience} years`
-                  : "Fresher"}
-              </div>
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] mb-1.5">
-                Current Company
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.current_company ?? "—"}
-              </div>
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] mb-1.5">
-                Expected CTC
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.expected_ctc
-                  ? `₹${candidate.professional_details.expected_ctc} LPA`
-                  : "—"}
-              </div>
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] mb-1.5">
-                Current Designation
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.current_designation ?? "—"}
-              </div>
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] mb-1.5">
-                Notice Period
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.notice_period ?? "—"}
-              </div>
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b] flex items-center gap-1.5 mb-1.5">
-                <MapPin className="h-3 w-3" /> Location
-              </div>
-              <div className="font-bold text-[#1d1d1f]">
-                {candidate.professional_details?.preferred_location ?? candidate.city ?? "—"}
-              </div>
-            </div>
-          </div>
-
-          {(candidate.documents?.length ?? 0) > 0 && (
-            <>
-              <div className="h-px bg-gray-100 my-8" />
-              <div className="flex flex-wrap gap-2">
-                {candidate.documents?.map((d) => (
-                  <span key={d.document_id} className="inline-flex items-center gap-1.5 bg-[#fbfbfd] border border-gray-200 px-3 py-1.5 rounded-full text-xs font-bold text-[#1d1d1f]">
-                    <FileText className="h-3.5 w-3.5 text-[#86868b]" />
-                    {d.document_type.replace(/_/g, " ")}
-                  </span>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
+      <CandidateProfileTabs data={candidate} />
 
       {/* Review Form */}
       <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
@@ -340,7 +246,7 @@ function HrReview() {
               >
                 <option value="" disabled>Select an interviewer</option>
                 {users
-                  .filter((u) => u.role?.role_name === "L1_PANEL")
+                  .filter((u) => u.role?.role_name === "L1_PANEL" || u.secondary_role?.role_name === "L1_PANEL")
                   .map((u) => (
                     <option key={u.email} value={u.email}>
                       {u.first_name} {u.last_name} ({u.email})
@@ -382,3 +288,5 @@ function HrReview() {
     </motion.div>
   );
 }
+
+

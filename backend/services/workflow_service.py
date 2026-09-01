@@ -519,6 +519,7 @@ def submit_ceo_round_evaluation(
     remarks: str,
     evaluation_data: Dict[str, Any],
     save_draft: bool,
+    ceo_status: str,
     performed_by: str
 ) -> InterviewRound:
     """
@@ -564,7 +565,7 @@ def submit_ceo_round_evaluation(
         log_detail = "Saved CEO evaluation draft for later."
     else:
         ceo_round.status = "COMPLETED"
-        candidate.status = "FINAL_DISCUSSION_PENDING"
+        candidate.status = "FINAL_DISCUSSION_PENDING" if ceo_status == "SELECT" else ("REJECTED" if ceo_status == "REJECT" else "ON_HOLD")
         
         # Deactivate assignment
         db.query(CandidateAssignment).filter(

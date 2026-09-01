@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { CandidateProfileTabs } from "@/components/candidate-profile-tabs";
 import { api } from "@/lib/api";
 import type { CandidateDetail, InterviewScore, InterviewEngineAssignment } from "@/lib/types";
 import { CEO_DIMENSIONS } from "@/lib/scorecard";
@@ -63,6 +64,7 @@ function CeoEval() {
 
   const { state, update, isComplete } = useScorecard(CEO_DIMENSIONS);
   const [remarks, setRemarks] = useState("");
+  const [ceoStatus, setCeoStatus] = useState<"SELECT" | "REJECT" | "HOLD">("SELECT");
 
   const submit = useMutation({
     mutationFn: (saveDraft: boolean) =>
@@ -72,6 +74,7 @@ function CeoEval() {
           remarks: remarks || "No remarks provided",
           evaluation_data: state,
           save_draft: saveDraft,
+            ceo_status: ceoStatus,
         },
       }),
     onSuccess: (_, saveDraft) => {
@@ -171,7 +174,9 @@ function CeoEval() {
         </div>
       )}
 
-      {/* Interview Technical Results */}
+      <CandidateProfileTabs data={data?.candidate} />
+
+        {/* Interview Technical Results */}
       {interviewScore ? (
         <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
           <h2 className="text-xl font-bold tracking-tight text-[#1d1d1f] mb-6 flex items-center gap-2">
@@ -287,7 +292,26 @@ function CeoEval() {
         </div>
       )}
 
-      {/* CEO Scorecard */}
+      
+        <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
+          <h2 className="text-xl font-bold tracking-tight text-[#1d1d1f] mb-2">Final Recommendation</h2>
+          <div className="space-y-2 max-w-sm">
+            <label className="text-[11px] font-bold text-[#86868b] uppercase tracking-wider ml-1">Decision</label>
+            <div className="relative">
+              <select 
+                value={ceoStatus} 
+                onChange={(e: any) => setCeoStatus(e.target.value)}
+                className="w-full bg-[#f5f5f7] border-transparent focus:border-[#0066cc] focus:ring-4 focus:ring-[#0066cc]/10 rounded-2xl py-3.5 pl-4 pr-10 text-sm font-bold text-[#1d1d1f] transition-all outline-none appearance-none"
+              >
+                <option value="SELECT">Select for Final Decision</option>
+                <option value="HOLD">Hold</option>
+                <option value="REJECT">Reject</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* CEO Scorecard */}
       <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
         <h2 className="text-xl font-bold tracking-tight text-[#1d1d1f] mb-1 flex items-center gap-2">
           <Star className="h-5 w-5 text-indigo-600" />

@@ -1,0 +1,60 @@
+# ATLAS HR SYSTEM - RECEPTIONIST USER MANUAL
+
+---
+## SLIDE 1: Title Slide
+**Headline:** ATLAS HR System - Receptionist Guide
+**Sub-headline:** Streamlining Candidate Arrivals & Verification
+**Footer:** Abhiyanta India Solutions
+
+---
+## SLIDE 2: Introduction
+**Headline:** Your Role in ATLAS
+**Content:** 
+As a Receptionist, you are the first point of contact for candidates arriving for their interviews. The ATLAS system empowers you to quickly verify candidate identities, mark their attendance in real-time, and automatically notify the HR team that the candidate has arrived.
+
+---
+## SLIDE 3: System Login
+**Headline:** Accessing the Portal
+**Content:**
+1. Open your web browser and navigate to the ATLAS secure portal.
+2. Enter your assigned Corporate Email ID.
+3. Enter your secure Password.
+4. Click "Login".
+*(Visual Note to Designer: Add a placeholder box here for a screenshot of the Login Screen)*
+
+---
+## SLIDE 4: The Reception Dashboard
+**Headline:** Navigating Your Workspace
+**Content:**
+Upon logging in, you will see the Reception Dashboard.
+- **Today's Interviews:** A quick summary of how many candidates are expected today.
+- **Recent Arrivals:** A log of candidates who have already checked in.
+- **Search Bar:** Located at the top of the screen to quickly find incoming candidates.
+
+---
+## SLIDE 5: Verifying a Candidate
+**Headline:** Candidate Check-In Process
+**Content:**
+When a candidate arrives at the front desk:
+1. Ask the candidate for their unique **Application Reference Number** (sent to them via email) or their full name.
+2. Enter the number or name into the Search Bar.
+3. Click on the candidate's profile to open their details.
+4. Verify their physical Government ID against the details on the screen.
+
+---
+## SLIDE 6: Marking Attendance
+**Headline:** Completing the Arrival
+**Content:**
+Once the candidate's identity is verified:
+1. Click the **"Mark Arrived"** button on their profile.
+2. The system will immediately update their status to "Waiting for Interview".
+3. An automated notification is instantly sent to the HR Admin and the assigned Interview Panel.
+4. Direct the candidate to the designated waiting area.
+
+---
+## SLIDE 7: Support & Troubleshooting
+**Headline:** Need Assistance?
+**Content:**
+- **Forgot Password?** Use the "Reset Password" link on the login screen.
+- **Candidate Not Found?** Ensure the candidate applied using the correct portal or contact HR immediately.
+- **System Issues?** Contact the internal IT Support team or the System Administrator.

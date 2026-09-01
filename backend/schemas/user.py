@@ -11,10 +11,12 @@ class UserCreate(BaseModel):
     password: str
     department: Optional[str] = None
     role_id: uuid.UUID
+    secondary_role_id: Optional[uuid.UUID] = None
     is_active: bool = True
 
 class RoleResponse(BaseModel):
     role_id: uuid.UUID
+    secondary_role_id: Optional[uuid.UUID] = None
     role_name: str
 
     model_config = {"from_attributes": True}
@@ -28,6 +30,7 @@ class UserResponse(BaseModel):
     mobile_no: Optional[str] = None
     department: Optional[str] = None
     role_id: uuid.UUID
+    secondary_role_id: Optional[uuid.UUID] = None
     is_active: bool
     role: Optional[RoleResponse] = None
 

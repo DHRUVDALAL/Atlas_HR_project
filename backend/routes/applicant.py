@@ -270,6 +270,7 @@ def submit_application_api(
     request: Request,
     payload: str = Form(..., description="JSON string of the full application"),
     signature: UploadFile = File(..., description="Signature PDF (max 5 MB)"),
+    resume: UploadFile = File(..., description="Resume PDF/DOCX (max 5 MB)"),
     db: Session = Depends(get_db),
 ):
     try:
@@ -285,7 +286,7 @@ def submit_application_api(
             detail=jsonable_encoder(exc.errors()),
         )
 
-    candidate = create_submitted_applicant(db, data, signature)
+    candidate = create_submitted_applicant(db, data, signature, resume)
 
     log_candidate_activity(
         db=db,

@@ -1,0 +1,68 @@
+# ATLAS HR SYSTEM - TECHNICAL INTERVIEWER (L1 PANEL) USER MANUAL
+
+---
+## SLIDE 1: Title Slide
+**Headline:** ATLAS HR System - Technical Interviewer Guide
+**Sub-headline:** Evaluating Talent with Precision
+**Footer:** Abhiyanta India Solutions
+
+---
+## SLIDE 2: Introduction
+**Headline:** Your Role in ATLAS
+**Content:** 
+As a Technical Interviewer (L1 Panel), you are responsible for assessing the skills and cultural fit of our candidates. The ATLAS system provides you with a clean, organized dashboard of your upcoming interviews, direct access to candidate resumes, and a streamlined evaluation form to submit your feedback directly to HR.
+
+---
+## SLIDE 3: System Login
+**Headline:** Secure Access
+**Content:**
+1. Navigate to the ATLAS secure portal.
+2. Enter your assigned Corporate Email ID.
+3. Enter your secure Password.
+4. Click "Login".
+*(Visual Note to Designer: Add a placeholder box here for a screenshot of the Login Screen)*
+
+---
+## SLIDE 4: Your Interview Dashboard
+**Headline:** Managing Your Schedule
+**Content:**
+Upon logging in, you will see your personalized Interview Dashboard.
+- **Upcoming Interviews:** A chronological list of candidates scheduled for you today.
+- **Status Indicators:** See at a glance if a candidate has "Arrived" (marked by the Receptionist) or is "Pending".
+- **History:** Access your past evaluations and completed interviews.
+
+---
+## SLIDE 5: Reviewing Candidate Profiles
+**Headline:** Preparing for the Interview
+**Content:**
+Before the interview begins:
+1. Click on the scheduled candidate's name in your Dashboard.
+2. Review their Profile Overview (Experience, Skills, Education).
+3. Click the **"View Resume"** button to open their uploaded document securely within the browser.
+4. Review any pre-screening notes left by the HR team.
+
+---
+## SLIDE 6: The Evaluation Form
+**Headline:** Conducting the Interview
+**Content:**
+During or immediately after the interview, use the built-in Evaluation Form:
+1. **Technical Skills:** Rate the candidate on specific technical competencies.
+2. **Communication:** Rate their clarity and interpersonal skills.
+3. **Detailed Notes:** Use the text box to provide detailed, objective feedback on their performance, strengths, and areas of concern.
+
+---
+## SLIDE 7: Submitting Your Recommendation
+**Headline:** Finalizing the Feedback
+**Content:**
+At the end of your evaluation:
+1. Select your final recommendation: **"Shortlist"** or **"Reject"**.
+2. Click the **"Submit Evaluation"** button.
+3. Once submitted, your feedback is instantly locked and routed securely to the HR Admin for the final hiring decision.
+
+---
+## SLIDE 8: Best Practices & Support
+**Headline:** Interview Guidelines
+**Content:**
+- Submit evaluations within 2 hours of the interview completion to maintain workflow speed.
+- Ensure all notes are objective, professional, and clear.
+- **Need Help?** For technical issues, contact the IT Administrator. For scheduling conflicts, reach out to HR immediately.

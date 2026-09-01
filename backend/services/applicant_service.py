@@ -190,7 +190,7 @@ def _add_sections(db: Session, applicant: Applicant, data: ApplicantFullCreate):
 
 
 def create_submitted_applicant(
-    db: Session, data: ApplicantFullCreate, signature: UploadFile
+    db: Session, data: ApplicantFullCreate, signature: UploadFile, resume: UploadFile
 ) -> Applicant:
     """Create a fully-submitted candidate in ONE atomic transaction.
 
@@ -262,6 +262,20 @@ def create_submitted_applicant(
         file_name=safe_name,
         file_path=file_path,
     ))
+    # 5b. Save Resume
+    resume_content = resume.file.read()
+    safe_resume_name = "".join([c for c in resume.filename if c.isalnum() or c in " ._-"]).rstrip()
+    resume_path = os.path.join(
+        UPLOAD_DIR, f"{applicant.candidate_id}_{timestamp}_{safe_resume_name}")
+    with open(resume_path, "wb") as f:
+        f.write(resume_content)
+    db.add(ApplicantDocument(
+        candidate_id=applicant.candidate_id,
+        document_type="RESUME",
+        file_name=safe_resume_name,
+        file_path=resume_path,
+    ))
+
 
     # 6. Commit atomically; clean up the file if the DB write fails.
     try:

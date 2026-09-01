@@ -1,0 +1,72 @@
+# ATLAS HR SYSTEM - SYSTEM ADMIN USER MANUAL
+
+---
+## SLIDE 1: Title Slide
+**Headline:** ATLAS HR System - System Admin Guide
+**Sub-headline:** Platform Configuration & User Management
+**Footer:** Abhiyanta India Solutions
+
+---
+## SLIDE 2: Introduction
+**Headline:** Your Role in ATLAS
+**Content:** 
+As a System Administrator (or Founder/MD), you have the highest level of access in the ATLAS ecosystem. You are responsible for overseeing the entire platform, managing employee accounts, configuring roles, and accessing top-level analytics to drive organizational decisions.
+
+---
+## SLIDE 3: Secure Login
+**Headline:** Executive Access
+**Content:**
+1. Navigate to the ATLAS secure portal.
+2. Enter your assigned Corporate Email ID.
+3. Enter your secure Password.
+4. Click "Login".
+*Note: Your account has unrestricted access. Ensure your credentials are strictly confidential.*
+
+---
+## SLIDE 4: The Executive Dashboard
+**Headline:** High-Level Analytics
+**Content:**
+The System Admin Dashboard provides critical insights:
+- **Total Pipeline Overview:** Active candidates vs. Hires.
+- **System Activity:** Real-time metrics on HR actions and interview completions.
+- **Conversion Rates:** Analytics on how efficiently candidates move through the hiring stages.
+
+---
+## SLIDE 5: User Management (Adding Employees)
+**Headline:** Scaling Your Team
+**Content:**
+To grant a new employee access to ATLAS:
+1. Navigate to the **"User Management"** tab.
+2. Click **"Add New User"**.
+3. Enter the employee's details (First Name, Last Name, Corporate Email).
+4. Assign a strict Role (e.g., HR_ADMIN, L1_PANEL, RECEPTIONIST).
+5. Set a temporary password and click **"Create User"**.
+
+---
+## SLIDE 6: Role & Permission Assignment
+**Headline:** Enforcing Security
+**Content:**
+Understanding System Roles:
+- **RECEPTIONIST:** Can only view arriving candidates and mark attendance.
+- **L1_PANEL:** Can only view candidates scheduled for *their* interviews and submit feedback.
+- **HR_ADMIN:** Can view all candidates, schedule interviews, and manage offers.
+- **SYSTEM_ADMIN:** Full access to everything, including User Management.
+*Never grant SYSTEM_ADMIN access unless absolutely necessary.*
+
+---
+## SLIDE 7: Account Maintenance
+**Headline:** Editing & Revoking Access
+**Content:**
+When an employee leaves the company or changes roles:
+1. Navigate to **"User Management"**.
+2. Search for the employee's name.
+3. Click on their profile.
+4. You can either **Edit** their role or change their "Status" to **Inactive** to instantly revoke their login access.
+
+---
+## SLIDE 8: System Troubleshooting
+**Headline:** IT & System Escalation
+**Content:**
+- **Email Delivery Issues:** Verify the SMTP settings in the server environment variables.
+- **Database Errors:** Check the PM2 server logs on the Ubuntu backend.
+- **Forgot Password?** You can manually reset any user's password from the User Management dashboard.

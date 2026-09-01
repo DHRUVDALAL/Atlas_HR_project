@@ -13,6 +13,7 @@ class User(Base):
     __tablename__ = "users"
 
     user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    secondary_role_id = Column(UUID(as_uuid=True), ForeignKey("roles.role_id"), nullable=True)
     role_id = Column(
         UUID(as_uuid=True),
         ForeignKey("roles.role_id"),
@@ -37,7 +38,8 @@ class User(Base):
         nullable=False,
     )
 
-    role = relationship("Role")
+    role = relationship("Role", foreign_keys=[role_id])
+    secondary_role = relationship("Role", foreign_keys=[secondary_role_id])
     refresh_tokens = relationship(
         "RefreshToken",
         back_populates="user",

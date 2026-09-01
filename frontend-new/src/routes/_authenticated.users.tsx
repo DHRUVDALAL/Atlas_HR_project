@@ -217,6 +217,7 @@ function UserModal({ user, roles, onClose, onSuccess }: any) {
     email: user?.email || "",
     employee_code: user?.employee_code || "",
     role_id: user?.role_id || "",
+      secondary_role_id: user?.secondary_role_id || "none",
     department: user?.department || "",
     password: "", // Only for create, or optional for edit (reset)
     is_active: user ? user.is_active : true,
@@ -292,6 +293,29 @@ function UserModal({ user, roles, onClose, onSuccess }: any) {
                 disabled={isEdit}
               />
             </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs font-bold text-[#86868b] uppercase tracking-wide">Secondary Role (Optional)</Label>
+              <Select
+                value={formData.secondary_role_id}
+                onValueChange={v => setFormData({ ...formData, secondary_role_id: v })}
+              >
+                <SelectTrigger className="w-full bg-[#f5f5f7] border-transparent focus:border-[#0066cc] focus:ring-4 focus:ring-[#0066cc]/10 rounded-2xl px-4 py-3 h-12 text-sm text-[#1d1d1f] transition-all outline-none">
+                  <SelectValue placeholder="Select secondary role" />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-gray-100 shadow-xl overflow-hidden">
+                  <SelectItem value="none" className="cursor-pointer py-3 rounded-xl focus:bg-[#f5f5f7] focus:text-[#1d1d1f] m-1">
+                    None
+                  </SelectItem>
+                  {roles.map((r: any) => (
+                    <SelectItem key={r.role_id} value={r.role_id} className="cursor-pointer py-3 rounded-xl focus:bg-[#f5f5f7] focus:text-[#1d1d1f] m-1">
+                      {r.role_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label className="text-xs font-bold text-[#86868b] uppercase tracking-wide">Department</Label>
               <input

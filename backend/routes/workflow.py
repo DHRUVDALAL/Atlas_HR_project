@@ -215,6 +215,7 @@ def evaluate_ceo_round_api(
         remarks=data.remarks,
         evaluation_data=data.evaluation_data,
         save_draft=data.save_draft,
+        ceo_status=data.ceo_status,
         performed_by=current_user.email
     )
     
@@ -302,6 +303,7 @@ def submit_final_decision_api(
         ceo_discussion=data.ceo_discussion,
         approved_by=data.approved_by,
         save_draft=data.save_draft,
+        ceo_status=data.ceo_status,
         performed_by=current_user.email,
         is_admin="evaluation.view_all" in perms
     )

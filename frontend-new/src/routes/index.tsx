@@ -286,13 +286,9 @@ function LandingPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: smoothEase }}
-            className="flex-1 w-full aspect-square bg-[#fbfbfd] rounded-3xl overflow-hidden border border-gray-100 shadow-sm flex items-center justify-center relative"
+            className="flex-1 w-full rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 border border-gray-100 bg-white"
           >
-             {/* Abstract minimal graphic representing the company */}
-             <div className="w-64 h-64 bg-white rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-center relative z-10">
-                <span className="text-gray-300 font-bold text-5xl tracking-tighter">AIS</span>
-             </div>
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border border-gray-200 rounded-full opacity-50 border-dashed" />
+             <img src="/abhiyanta_about.png" alt="Abhiyanta India Solutions" className="w-full h-full object-contain" />
           </motion.div>
         </div>
       </section>
@@ -314,19 +310,19 @@ function LandingPage() {
                    <div className="w-12 h-12 bg-[#fbfbfd] rounded-full border border-gray-100 flex items-center justify-center text-gray-700">
                      <Mail size={20} />
                    </div>
-                   <span className="font-medium text-black">contact@abhiyanta.com</span>
+                   <span className="font-medium text-black">recruiter@abhiyantatech.com</span>
                 </div>
                 <div className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                    <div className="w-12 h-12 bg-[#fbfbfd] rounded-full border border-gray-100 flex items-center justify-center text-gray-700">
                      <Phone size={20} />
                    </div>
-                   <span className="font-medium text-black">+91 123 456 7890</span>
+                   <span className="font-medium text-black">+91 8956667804, +91 9028051757</span>
                 </div>
                 <div className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                    <div className="w-12 h-12 bg-[#fbfbfd] rounded-full border border-gray-100 flex items-center justify-center text-gray-700">
                      <MapPin size={20} />
                    </div>
-                   <span className="font-medium text-black">Pune, India</span>
+                   <span className="font-medium text-black">LOHIA JAIN IT PARK A WING, OFFICE NO A-101 CHANDANI CHOWK, KOTHRUD, PUNE 411038</span>
                 </div>
              </div>
            </motion.div>

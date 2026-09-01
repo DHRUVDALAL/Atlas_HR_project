@@ -469,20 +469,27 @@ function RoundCard({ round }: { round: InterviewRound }) {
         )}
       </div>
       
-      {round.evaluation_data && (
+      {round.evaluation_data && Object.keys(round.evaluation_data).length > 0 && (
         <div className="space-y-4 mb-6">
-          {Object.entries(round.evaluation_data).map(([k, v]) => (
-            <div
-              key={k}
-              className="flex items-center justify-between gap-4"
-            >
-              <div className="text-sm font-medium text-[#1d1d1f]">{k}</div>
-              <div className="flex items-center gap-1.5 bg-[#fbfbfd] px-3 py-1 rounded-full border border-gray-100">
-                <Star className="h-3.5 w-3.5 text-[#0066cc] fill-[#0066cc]" />
-                <span className="font-mono text-sm font-bold text-[#1d1d1f]">{v.rating}<span className="text-[#86868b]">/5</span></span>
+          {Object.entries(round.evaluation_data.topic_scores || round.evaluation_data).map(([k, v]: [string, any]) => {
+            // Ignore internal score keys if they leaked in somehow
+            if (typeof v !== 'object' && typeof v !== 'number') return null;
+            return (
+              <div key={k} className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-sm font-medium text-[#1d1d1f]">{k}</div>
+                  {v?.remarks && <div className="text-[11px] font-bold text-[#86868b] uppercase tracking-wide mt-1">{v.remarks}</div>}
+                </div>
+                <div className="flex items-center gap-1.5 bg-[#fbfbfd] px-3 py-1 rounded-full border border-gray-100 shrink-0">
+                  <Star className="h-3.5 w-3.5 text-[#0066cc] fill-[#0066cc]" />
+                  <span className="font-mono text-sm font-bold text-[#1d1d1f]">
+                    {typeof v === "object" ? v.rating : Number(v).toFixed(1)}
+                    <span className="text-[#86868b]">/5</span>
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       {round.remarks && (
